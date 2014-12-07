@@ -1,6 +1,6 @@
 {
   "name": "three-fly-controls",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "three.js fly controls module",
   "main": "index.js",
   "scripts": {
