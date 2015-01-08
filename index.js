@@ -57,7 +57,7 @@ module.exports = function(THREE) {
 
             }
 
-            //event.preventDefault();
+            
 
             switch ( event.keyCode ) {
 
@@ -81,6 +81,12 @@ module.exports = function(THREE) {
                 case 81: /*Q*/ this.moveState.rollLeft = 1; break;
                 case 69: /*E*/ this.moveState.rollRight = 1; break;
 
+            }
+            
+            var surpress = [38, 40, 37, 39];
+
+            if(surpress.indexOf(event.keyCode) > -1) {
+                event.preventDefault();
             }
 
             this.updateMovementVector();
