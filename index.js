@@ -9,17 +9,19 @@
 
 module.exports = function(THREE) {
 
-    THREE.FlyControls = function ( object, domElement ) {
+    THREE.FlyControls = function ( object, domElement, opts ) {
 
         this.object = object;
+
+        opts = opts || {};
 
         this.domElement = ( domElement !== undefined ) ? domElement : document;
         if ( domElement ) this.domElement.setAttribute( 'tabindex', -1 );
 
         // API
 
-        this.movementSpeed = 1.0;
-        this.rollSpeed = 0.005;
+        this.movementSpeed = (opts.movementSpeed === undefined) ? 1.0 : opts.movementSpeed;
+        this.rollSpeed = (opts.rollSpeed === undefined) ? 0.005 : opts.rollSpeed;
 
         this.dragToLook = true;
         this.autoForward = false;
@@ -172,6 +174,16 @@ module.exports = function(THREE) {
 
         };
 
+
+        this.mouseout = function( event ) {
+
+            event.preventDefault();
+            event.stopPropagation();
+            this.moveState = { up: 0, down: 0, left: 0, right: 0, forward: 0, back: 0, pitchUp: 0, pitchDown: 0, yawLeft: 0, yawRight: 0, rollLeft: 0, rollRight: 0 };
+            this.updateRotationVector();
+            this.updateMovementVector();
+        };
+
         this.mouseup = function( event ) {
 
             event.preventDefault();
@@ -263,6 +275,8 @@ module.exports = function(THREE) {
 
         };
 
+
+
         function bind( scope, fn ) {
 
             return function () {
@@ -278,9 +292,10 @@ module.exports = function(THREE) {
         this.domElement.addEventListener( 'mousemove', bind( this, this.mousemove ), false );
         this.domElement.addEventListener( 'mousedown', bind( this, this.mousedown ), false );
         this.domElement.addEventListener( 'mouseup',   bind( this, this.mouseup ), false );
+        this.domElement.addEventListener( 'mouseout',   bind( this, this.mouseout ), false );
 
-        window.addEventListener( 'keydown', bind( this, this.keydown ), false );
-        window.addEventListener( 'keyup',   bind( this, this.keyup ), false );
+        this.domElement.addEventListener( 'keydown', bind( this, this.keydown ), false );
+        this.domElement.addEventListener( 'keyup',   bind( this, this.keyup ), false );
 
         this.updateMovementVector();
         this.updateRotationVector();
